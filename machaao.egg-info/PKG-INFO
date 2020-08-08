@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: machaao
 Version: 0.0.1
-Summary:  Machaao package for connecting MessengerX.io APIs to MessengerX.io Chatbots 
+Summary:  An easy to use abstraction for connecting MACHAAO Platform APIs to your chatbot logic
 Home-page: https://github.com/machaao/machaao-py
 Author: Abhishek Raj
 Author-email: abhishek@machaao.com
@@ -30,7 +30,7 @@ Description: # machaao-py
         10. send_async
         11. send_message
         
-        #### NOTE: ALPHA VERSION
+        #### NOTE: THIS IS AN ALPHA VERSION
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
