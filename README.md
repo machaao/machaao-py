@@ -13,9 +13,9 @@ pip install machaao
 1. attach_tag_to_user
 2. content_search
 3. content_search_via_slug
-4. insert_content
-5. get_user_profile
-6. get_user_tags
+4. get_user_profile
+5. get_user_tags
+6. insert_content
 7. request_handler
 8. send
 9. send_announcement

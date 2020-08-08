@@ -1,0 +1,39 @@
+Metadata-Version: 2.1
+Name: machaao
+Version: 0.0.1
+Summary:  Machaao package for connecting MessengerX.io APIs to MessengerX.io Chatbots 
+Home-page: https://github.com/machaao/machaao-py
+Author: Abhishek Raj
+Author-email: abhishek@machaao.com
+License: UNKNOWN
+Description: # machaao-py
+        
+        ### Install
+        ```bash
+        # For Linux/MacOS
+        pip3 install machaao
+        
+        # For Windows
+        pip install machaao
+        ```
+        
+        ### Functions
+        1. attach_tag_to_user
+        2. content_search
+        3. content_search_via_slug
+        4. insert_content
+        5. get_user_profile
+        6. get_user_tags
+        7. request_handler
+        8. send
+        9. send_announcement
+        10. send_async
+        11. send_message
+        
+        #### NOTE: ALPHA VERSION
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
