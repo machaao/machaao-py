@@ -1,4 +1,6 @@
 # machaao-py
+An easy to use abstraction for connecting MACHAAO Platform APIs to your chatbot logic
+Author: Abhishek Raj
 
 ### Install
 ```bash
@@ -22,4 +24,4 @@ pip install machaao
 10. send_async
 11. send_message
 
-#### NOTE: ALPHA VERSION
+#### NOTE: THIS IS AN ALPHA VERSION
