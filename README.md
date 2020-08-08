@@ -1,6 +1,5 @@
 # machaao-py
 An easy to use abstraction module for connecting MACHAAO Platform APIs to your chatbot logic
-Author: Abhishek Raj
 
 ### Install
 ```bash
