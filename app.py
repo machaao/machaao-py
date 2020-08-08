@@ -11,7 +11,7 @@ import sys
 import traceback
 import os
 import asyncio
-from machaao import requestHandler
+from machaao import request_handler
 
 app = FlaskAPI(__name__)
 
@@ -23,7 +23,7 @@ def health_check():
 @app.route("/machaao_hook", methods=["POST"])
 def messageHandler():
 
-    print(requestHandler(request))
+    print(request_handler(request))
 
     return jsonify({"Status": 200, "Msg": "Service is Up"})
 

@@ -1,10 +1,23 @@
-from setuptools import setup
-setup(name='machaao',
-version='0.1',
-description='Machaao package for connecting MessengerX.io APIs to MessengerX.io Chatbots',
-url='https://github.com/machaao/machaao-py',
-author='Abhishek Raj',
-author_email='abhishek@machaao.com',
-license='MIT',
-packages=['machaao-py'],
-zip_safe=False)
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="machaao",
+    version="0.0.1",
+    author="Abhishek Raj",
+    author_email="abhishek@machaao.com",
+    description=" Machaao package for connecting MessengerX.io APIs to MessengerX.io Chatbots ",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/machaao/machaao-py",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+)
+
