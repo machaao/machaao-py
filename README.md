@@ -23,16 +23,23 @@ pip install machaao
 machaao start <project_name>
 ```
 
+### navigate to the newly created chatbot project directory
+```bash
+cd <project_name>
+```
+
 ### Please update the settings.yml to the api key and base url as shown below
 ```bash
 machaao_api_token = "<API_KEY_FROM_PORTAL>"
 machaao_base_url = "https://ganglia-dev.machaao.com" [for development purposes]
 ```
 
-### Build and Run
+### Run your simple chatbot 
 ```bash
-cd <project_name>
 python3 chatbot.py
 ```
+
+### Install NGROK
+
 
 #### NOTE: UNDER ACTIVE DEVELOPMENT (PRE-ALPHA)
