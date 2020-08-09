@@ -7,7 +7,7 @@ CURR_DIR=$(pwd)
 if [[ $1 == "" ]]; then
     echo "NO ARGS GIVEN, HElP UNDER DEV"
 
-elif [[ $1 == "startproject" ]]; then
+elif [[ $1 == "start" ]]; then
 
     if [[ $2 == "" ]]; then
         echo "Project name missing"
