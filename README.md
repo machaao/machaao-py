@@ -51,12 +51,13 @@ python3 chatbot.py
 
 ### Run NGROK and note down your NGROK URL
 ```bash
-https://<....>.ngrok.io/
+ngrok http 5000
+[https://<....>.ngrok.io/]
 ```
 
 ### Got to your bot settings on the portal and update your Chatbot Webhook URL Settings
 ```bash
-https://<....>.ngrok.io/machaao/incoming
+[https://<....>.ngrok.io/machaao/incoming]
 ```
 
 ### Your chatbot is now ready to start receiving incoming messages from our Platform
