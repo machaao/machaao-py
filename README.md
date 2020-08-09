@@ -8,7 +8,7 @@ ngrok
 ```
 
 # Get your FREE API Key through the Dev Portal
-Get your FREE API Key @ portal.messengerx.io
+Get your FREE API Key @ https://portal.messengerx.io
 
 ### Install
 ```bash
