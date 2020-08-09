@@ -60,7 +60,7 @@ ngrok http 5000
 [https://<....>.ngrok.io/machaao/incoming]
 ```
 
-### Your chatbot is now ready to start receiving incoming messages from our Platform
+### Your chatbot is now ready to start receiving incoming messages from users
 ```bash
 #HappyCoding
 ```
