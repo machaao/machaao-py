@@ -22,11 +22,9 @@ def health_check():
     return jsonify(ret)
 
 
-@app.route("/machaao_hook", methods=["GET", "POST"])
+@app.route("/machaao/incoming", methods=["GET", "POST"])
 def messageHandler():
-
     # under development
-
     return jsonify()
 
 

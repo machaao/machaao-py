@@ -4,15 +4,25 @@ An easy to use module for python developers looking to build and develop chat ap
 ### Minimum Requirements
 ```bash
 python3 
+ngrok
 ```
 
-# Get your FREE API Key through Dev Portal - MessengerX.io
+# Get your FREE API Key through the Dev Portal
 Get your FREE API Key @ portal.messengerx.io
 
 ### Install
 ```bash
 # For Linux/MacOS
 pip3 install machaao
+
+# For Windows
+pip install machaao
+```
+
+###  NGROK (Required for local development)
+```bash
+# For Linux/MacOS
+brew install ngrok
 
 # For Windows
 pip install machaao
@@ -39,7 +49,19 @@ machaao_base_url = "https://ganglia-dev.machaao.com" [for development purposes]
 python3 chatbot.py
 ```
 
-### Install NGROK
+### Run NGROK and note down your NGROK URL
+```bash
+https://<....>.ngrok.io/
+```
 
+### Got to your bot settings on the portal and update your Chatbot Webhook URL Settings
+```bash
+https://<....>.ngrok.io/machaao/incoming
+```
+
+### Your chatbot is now ready to start receiving incoming messages from our Platform
+```bash
+#HappyCoding
+```
 
 #### NOTE: UNDER ACTIVE DEVELOPMENT (PRE-ALPHA)
