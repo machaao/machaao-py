@@ -1,0 +1,32 @@
+#!/bin/
+
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+FILES="${SOURCE_DIR}/*.py ${SOURCE_DIR}/*.yml"
+CURR_DIR=$(pwd)
+
+if [[ $1 == "" ]]; then
+    echo "NO ARGS GIVEN, HElP UNDER DEV"
+
+elif [[ $1 == "startproject" ]]; then
+
+    if [[ $2 == "" ]]; then
+        echo "Project name missing"
+
+    elif [[ $2 == "." ]]; then
+        echo "dot"
+        echo "Starting project at ${CURR_DIR}"
+    else
+        if [ -d $2 ]; then
+            echo "Directory already exists named $2"
+            exit 1
+        fi
+        mkdir $2
+        echo "Creating directory..... $2"
+        echo "Starting project at ${CURR_DIR}/${2}"
+        cp $FILES "${CURR_DIR}/${2}"
+        echo "Copying project files at ${CURR_DIR}/${2}"
+    fi
+
+elif [[ $1 == "runserver" ]]; then
+    $(python3 chatbot.py)
+fi

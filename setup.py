@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="machaao",
-    version="0.0.2",
+    version="0.0.3",
     author="Abhishek Raj",
     author_email="abhishek@machaao.com",
     description=" Machaao package for connecting MessengerX.io APIs to MessengerX.io Chatbots ",
@@ -19,5 +19,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    scripts=['bin/startup.sh']
 )
 

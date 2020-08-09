@@ -1,8 +1,0 @@
-README.md
-setup.py
-machaao/__init__.py
-machaao/machaao.py
-machaao.egg-info/PKG-INFO
-machaao.egg-info/SOURCES.txt
-machaao.egg-info/dependency_links.txt
-machaao.egg-info/top_level.txt

@@ -1,11 +1,11 @@
-import requests
+from requests import request
 import json
 import httpx
 import asyncio
 import jwt
 
 def send(url, headers, payload):
-    return requests.request("POST", url, data=json.dumps(payload), headers=headers)
+    return request("POST", url, data=json.dumps(payload), headers=headers)
 
 
 async def send_async(url, headers, payload):
@@ -51,7 +51,7 @@ def get_user_profile(api_token, base_url, user_id):
         "Content-Type": "application/json",
     }
 
-    return requests.request("GET", url,headers=headers)
+    return request("GET", url,headers=headers)
 
 def content_search(api_token, base_url, query):
     """Search content on your bot"""
@@ -63,7 +63,7 @@ def content_search(api_token, base_url, query):
         "Content-Type": "application/json",
     }
 
-    return requests.request("GET", url,headers=headers)
+    return request("GET", url,headers=headers)
 
 def content_search_via_slug(api_token, base_url, slug):
     """Search content on your bot"""
@@ -75,7 +75,7 @@ def content_search_via_slug(api_token, base_url, slug):
         "Content-Type": "application/json",
     }
 
-    return requests.request("GET", url,headers=headers)
+    return request("GET", url,headers=headers)
 
 
 def send_announcement(base_url, api_token, payload):
@@ -101,7 +101,7 @@ def get_user_tags(api_token, base_url ,user_id):
         "Content-Type": "application/json",
     }
 
-    return requests.request("GET", url,headers=headers)
+    return request("GET", url,headers=headers)
 
 def request_handler(request):
 
@@ -135,4 +135,4 @@ def send_message(api_token, base_url, payload):
         "Content-Type": "application/json",
     }
 
-    return send(url, headers, payload)
+    return request("POST", url, data=json.dumps(payload), headers=headers)
