@@ -1,5 +1,13 @@
-# machaao-py
-An easy to use abstraction module for connecting MACHAAO Platform APIs to your chatbot logic
+# machaao - python module
+An easy to use module for python developers looking to build and develop chat apps using MACHAAO Platform
+
+### Minimum Requirements
+```bash
+python3 
+```
+
+# Get your FREE API Key through Dev Portal - MessengerX.io
+Get your FREE API Key @ portal.messengerx.io
 
 ### Install
 ```bash
@@ -15,10 +23,16 @@ pip install machaao
 machaao start <project_name>
 ```
 
+### Please update the settings.yml to the api key and base url as shown below
+```bash
+machaao_api_token = "<API_KEY_FROM_PORTAL>"
+machaao_base_url = "https://ganglia-dev.machaao.com" [for development purposes]
+```
+
 ### Build and Run
 ```bash
 cd <project_name>
 python3 chatbot.py
 ```
 
-#### NOTE: THIS IS AN ALPHA VERSION
+#### NOTE: UNDER ACTIVE DEVELOPMENT (PRE-ALPHA)
