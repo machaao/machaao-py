@@ -28,6 +28,26 @@ def attach_tag_to_user(base_url, user_id, api_token, payload):
 
     return await send_async(url, headers, payload)
 
+def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_token):
+    """ This function used to add tag to userId."""
+
+    url = f"{base_url}/v1/users/tag/{user_id}"
+
+    headers = {
+        "api_token": api_token,  # token for the bot
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "tag": tag,
+        "displayName": displayName,
+        "values": values,
+        "active": eval(active)
+    }
+
+    return await send_async(url, headers, payload)
+
+
 def insert_content(base_url, user_id, api_token, payload):
     """Insert or update content for your bot"""
 
