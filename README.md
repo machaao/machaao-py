@@ -73,7 +73,7 @@ ngrok http 5000
 
 ### Your chatbot is now ready to start receiving incoming messages from users
 ```bash
-#H appyCoding
+# HappyCoding
 ```
 
 #### NOTE: UNDER ACTIVE DEVELOPMENT (ACCEPTING PULL REQUESTS)
