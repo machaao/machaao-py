@@ -1,5 +1,5 @@
 # machaao - python module
-An easy to use module for python developers looking to build and develop chat apps using MACHAAO Platform
+An easy to use module for python developers looking to build, prototype and publish chat apps
 
 ### Minimum Requirements
 ```bash
@@ -48,8 +48,19 @@ cd <project_name>
 MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
 MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com" [for development purposes]
 ```
+### Run NGROK in a seperate terminal and note down your NGROK FORWARDING URL
+```bash
+ngrok http 5000
+[https://<....>.ngrok.io/]
+```
 
-### Run your simple chatbot 
+
+### Go to your bot settings on the portal and update your Chatbot Webhook URL Settings
+```bash
+[https://<....>.ngrok.io/machaao/incoming]
+```
+
+### Run your simple chatbot on your local server
 ```bash
 # For Linux/MacOS
 python3 chatbot.py
@@ -58,18 +69,8 @@ python3 chatbot.py
 python chatbot.py
 ```
 
-### Run NGROK and note down your NGROK FORWARDING URL
-```bash
-ngrok http 5000
-[https://<....>.ngrok.io/]
-```
+###  https://dev.messengerx.io/<chatbot_name> to send a message to your chatbot.
 
-### Visit https://dev.messengerx.io/<chatbot_name> to see your chatbot.
-
-### Go to your bot settings on the portal and update your Chatbot Webhook URL Settings
-```bash
-[https://<....>.ngrok.io/machaao/incoming]
-```
 
 ### Your chatbot is now ready to start receiving incoming messages from users
 ```bash
