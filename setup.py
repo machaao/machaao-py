@@ -19,6 +19,16 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    scripts=['bin/startup.sh']
+    install_requires=[
+        "requests",
+        "pyjwt",
+        "asyncio",
+        "flask",
+        "httpx",
+        "bs4",
+        "Flask-API",
+        "click"
+    ],
+    scripts=['bin/machaao']
 )
 

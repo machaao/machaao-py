@@ -9,11 +9,8 @@ def send(url, headers, payload):
 
 
 async def send_async(url, headers, payload):
-    async with httpx.AsyncClient() as client:
-        print("sending async to machaao platform: " + str(payload))
-        r = await client.post(url, data=json.dumps(payload), headers=headers)
-        
-        return r
+    async with httpx.AsyncClient() as client:        
+        return (await client.post(url, data=json.dumps(payload), headers=headers))
 
 
 def attach_tag_to_user(base_url, user_id, api_token, payload):
@@ -26,7 +23,7 @@ def attach_tag_to_user(base_url, user_id, api_token, payload):
         "Content-Type": "application/json",
     }
 
-    return await send_async(url, headers, payload)
+    return asyncio.run(send_async(url, headers, payload))
 
 def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_token):
     """ This function used to add tag to userId."""
@@ -45,7 +42,7 @@ def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_to
         "active": eval(active)
     }
 
-    return await send_async(url, headers, payload)
+    return  asyncio.run(send_async(url, headers, payload))
 
 
 def insert_content(base_url, user_id, api_token, payload):
@@ -58,7 +55,7 @@ def insert_content(base_url, user_id, api_token, payload):
         "Content-Type": "application/json",
     }
 
-    return await send_async(url, headers, payload)
+    return asyncio.run(send_async(url, headers, payload))
 
 
 def get_user_profile(api_token, base_url, user_id):
@@ -108,7 +105,7 @@ def send_announcement(base_url, api_token, payload):
         "Content-Type": "application/json",
     }
 
-    return await send_async(url, headers, payload)
+    return asyncio.run(send_async(url, headers, payload))
 
 
 def get_user_tags(api_token, base_url ,user_id):

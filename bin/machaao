@@ -1,32 +1,52 @@
-#!/bin/
+#!/usr/bin/python3
 
-SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-FILES="${SOURCE_DIR}/*.py ${SOURCE_DIR}/*.yml"
-CURR_DIR=$(pwd)
+import errno
+import click
+import os
+from shutil import copytree, copy
+import machaao
 
-if [[ $1 == "" ]]; then
-    echo "NO ARGS GIVEN, HElP UNDER DEV"
+FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
-elif [[ $1 == "start" ]]; then
+CURR_DIR = os.path.abspath(os.getcwd())
 
-    if [[ $2 == "" ]]; then
-        echo "Project name missing"
 
-    elif [[ $2 == "." ]]; then
-        echo "dot"
-        echo "Starting project at ${CURR_DIR}"
-    else
-        if [ -d $2 ]; then
-            echo "Directory already exists named $2"
-            exit 1
-        fi
-        mkdir $2
-        echo "Creating directory..... $2"
-        echo "Starting project at ${CURR_DIR}/${2}"
-        cp $FILES "${CURR_DIR}/${2}"
-        echo "Copying project files at ${CURR_DIR}/${2}"
-    fi
+def copyany(src, dst):
+    try:
+        copy(src, dst)
+    except OSError as exc:
+        click.secho(exc, fg="red", bold=True)
 
-elif [[ $1 == "runserver" ]]; then
-    $(python3 chatbot.py)
-fi
+
+@click.command()
+@click.option('--start', type=str, default='/', help="Start a project by passing Project Name or .")
+def cli(start):
+    """
+    An easy to use module for python developers 
+    looking to build and develop chatbots using 
+    MACHAAO Platform. Provide the Project Name to start with the template.
+    Here is an example:
+
+    1. machaao --start sample-chatbot
+
+    You need a valid FREE API key from https://messengerx.io for the server to work. You can
+    sign up for a free account at https://portal.messengerx.io.
+    """
+    path = os.path.join(CURR_DIR, start)
+    try:
+        os.mkdir(path)
+    except Exception as e:
+        click.echo(e)
+        raise SystemExit(0)
+    click.secho(f'Project {start} created...', fg="green", bold=True, )
+
+    copyany(FILE_DIR+"/chatbot.py", path+"/")
+
+    click.secho(f'Copying files to project directory...', fg="green", bold=True)
+
+    click.secho(f'Project Created, Keep Developing Bots', fg="blue", blink=True)
+    
+    
+
+if __name__=='__main__':
+    cli()
