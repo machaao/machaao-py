@@ -1,5 +1,5 @@
 # machaao - python module
-An easy to use module for python developers looking to build and develop chat apps using MACHAAO Platform
+An easy to use module for python developers looking to build, prototype and publish chat apps
 
 ### Minimum Requirements
 ```bash
