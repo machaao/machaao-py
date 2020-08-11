@@ -38,8 +38,6 @@ def messageHandler():
 
     message = incoming_data["messaging"]
 
-    source = incoming_data["source"]
-
     message = message[0]["message_data"]["text"]
 
     # Currently server set to echo.
@@ -50,9 +48,6 @@ def messageHandler():
         "users": [user_id],
         "message": {"text": message},
     }
-
-    if source:
-        payload["source"] = source
 
     # Read more about APIs here: https://ganglia.machaao.com/api-docs/#/
     # or here https://messengerx.readthedocs.io/en/latest/ or here
