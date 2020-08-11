@@ -1,4 +1,6 @@
 # machaao - python module
+[![codebeat badge](https://codebeat.co/badges/9ddf5add-675b-4816-8209-45cf29e686a3)](https://codebeat.co/projects/github-com-machaao-machaao-py-master)  
+
 An easy to use module for python developers looking to build, prototype and publish chat apps
 
 ### Minimum Requirements
