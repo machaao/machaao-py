@@ -1,0 +1,4 @@
+dist/
+build/
+machaao.egg-info/
+*.pyc

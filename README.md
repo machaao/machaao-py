@@ -3,8 +3,7 @@ An easy to use module for python developers looking to build, prototype and publ
 
 ### Minimum Requirements
 ```bash
-python # 3 or higher version
-ngrok
+python # 3.6 or higher version
 ```
 
 # Get your FREE API Key through the Dev Portal
@@ -19,23 +18,9 @@ pip3 install machaao
 pip install machaao
 ```
 
-###  NGROK (Required for local development)
-```bash
-# For Debian based OS
-sudo snap install ngrok
-
-# For MacOS
-brew install ngrok
-
-# For Windows
-pip install machaao
-
-# For other OS visit: https://ngrok.com/download
-```
-
 ### Create new chatbot project
 ```bash
-machaao --start <project_name>
+machaao startproject -s <project_name>
 ```
 
 ### Navigate to the newly created chatbot project directory
@@ -48,16 +33,17 @@ cd <project_name>
 MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
 MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com" [for development purposes]
 ```
-### Run NGROK in a seperate terminal and note down your NGROK FORWARDING URL
+### Run Machaao Tunnel in a seperate terminal and note down your FORWARDING URL
 ```bash
-ngrok http 5000
-[https://<....>.ngrok.io/]
+machaao tunnel -p 5000 -t [CHATBOT-TOKEN]
+
+[https://<....>.tunnel.messengerx.io/]
 ```
 
 
 ### Go to your bot settings on the portal and update your Chatbot Webhook URL Settings
 ```bash
-[https://<....>.ngrok.io/machaao/incoming]
+[https://<....>.tunnel.messengerx.io/machaao/incoming]
 ```
 
 ### Run your simple chatbot on your local server

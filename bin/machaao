@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-import errno
 import click
+import sys
 import os
 from shutil import copytree, copy
 import machaao
+import asyncio
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
@@ -18,35 +19,78 @@ def copyany(src, dst):
         click.secho(exc, fg="red", bold=True)
 
 
-@click.command()
-@click.option('--start', type=str, default='/', help="Start a project by passing Project Name or .")
-def cli(start):
+@click.group()
+def cli():
     """
     An easy to use module for python developers 
     looking to build and develop chatbots using 
     MACHAAO Platform. Provide the Project Name to start with the template.
+
     Here is an example:
 
-    1. machaao --start sample-chatbot
+    1. machaao startproject -n sample-chatbot
+
+    2. machaao tunnel -p [PORT] # If chatbot token is saved on path.
+
+    3. machaao tunnel -p [PORT] -t [TOKEN]
 
     You need a valid FREE API key from https://messengerx.io for the server to work. You can
     sign up for a free account at https://portal.messengerx.io.
     """
-    path = os.path.join(CURR_DIR, start)
+    pass
+
+
+@click.command()
+@click.option('-n', type=str, default='5000', help="Enter the name of project.")
+def startproject(s):
+
+    path = os.path.join(CURR_DIR, s)
+
     try:
         os.mkdir(path)
-    except Exception as e:
-        click.echo(e)
+    except OSError:
         raise SystemExit(0)
-    click.secho(f'Project {start} created...', fg="green", bold=True, )
-
+    
+    click.secho(f'Project {s} created...', fg="blue", bold=True)
     copyany(FILE_DIR+"/chatbot.py", path+"/")
-
     click.secho(f'Copying files to project directory...', fg="green", bold=True)
+    click.secho(f'Project Created, Keep Developing ChatBots', fg="blue", blink=True)
 
-    click.secho(f'Project Created, Keep Developing Bots', fg="blue", blink=True)
-    
-    
 
-if __name__=='__main__':
+@click.command()
+@click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
+@click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
+def tunnel(p, t):
+
+    machaao_token = None
+
+    if t != None:
+        machaao_token = t
+
+    if t == None:
+        machaao_token = os.getenv("MessengerXAPIToken", None)
+        if machaao_token is None:
+            sys.exit("Chatbot token not set")
+            
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(
+            machaao.open_tunnel(
+                ws_uri=f'wss://mx.tunnel.messengerx.io/_ws/?username={machaao_token}&port={p}',
+                http_uri=f'http://127.0.0.1:{p}',
+            )
+        )
+    except KeyboardInterrupt:
+        click.echo("\nmachaao tunnel closed")
+
+@click.command()
+def version():
+    click.echo("v0.1.5")
+
+cli.add_command(startproject)
+cli.add_command(tunnel)
+cli.add_command(version)
+
+
+if __name__ == '__main__':
     cli()

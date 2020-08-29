@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="machaao",
-    version="0.1.3",
+    version="0.1.5",
     author="Abhishek Raj",
     author_email="abhishek@machaao.com",
     description="An easy to use module for python developers looking to build and develop chat apps using MessengerX.io",
@@ -27,8 +27,10 @@ setuptools.setup(
         "httpx",
         "bs4",
         "Flask-API",
-        "click"
+        "click",
+        "certifi",
+        "websockets",
+        "aiohttp",
     ],
     scripts=['bin/machaao']
 )
-
