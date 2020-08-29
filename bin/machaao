@@ -81,7 +81,14 @@ def tunnel(p, t):
             )
         )
     except KeyboardInterrupt:
-        click.echo("\nmachaao tunnel closed")
+        click.echo("\nMachaao tunnel closed")
+    
+    except Exception as e:
+        if int(str(e)[6:11])== 1006:
+            click.echo("\nChatbot Token Incorrect")
+        else:
+            print(e)
+            print("Contact: support@messengerx.io")
 
 @click.command()
 def version():
