@@ -80,8 +80,8 @@ def tunnel(p, t):
                 http_uri=f'http://127.0.0.1:{p}',
             )
         )
-    except KeyboardInterrupt:
-        click.echo("\nmachaao tunnel closed")
+    except Exception as ex:
+        click.echo("\nmachaao tunnel closed" + str(ex))
 
 @click.command()
 def version():
