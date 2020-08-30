@@ -8,7 +8,7 @@ import machaao
 import asyncio
 from requests import request
 from json import dumps
-from subprocess import check_output, STDOUT
+import subprocess
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
@@ -63,10 +63,8 @@ def startproject(s):
 @click.command()
 @click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
 @click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
-def tunnel(p, t):
-
-    print(f'Incoming tunnel params: {p}....... {t}')
-
+@click.option('-h', type=int, default=None, help="get host name")
+def tunnel(p, t, h):
     machaao_token = None
 
     if t != None:
@@ -76,15 +74,27 @@ def tunnel(p, t):
         machaao_token = os.getenv("MessengerXAPIToken", None)
         if machaao_token is None:
             sys.exit("Chatbot token not set")
-            
+
+
+    #Not the right way of doing it only doing it for testing.
+    _ws_uri = f'wss://mx.tunnel.messengerx.io/_ws/?username={machaao_token}&port={p}'
+
+    host = None
+
     loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(
-            machaao.open_tunnel(
-                ws_uri=f'wss://mx.tunnel.messengerx.io/_ws/?username={machaao_token}&port={p}',
-                http_uri=f'http://127.0.0.1:{p}',
+        if h:
+            host = loop.run_until_complete(machaao.generate_host_url(ws_uri=_ws_uri))
+            click.echo(str(host))
+        else:
+            print(f'Incoming tunnel params: {p}....... {t}')
+            loop.run_until_complete(
+                machaao.open_tunnel(
+                    ws_uri=_ws_uri,
+                    http_uri=f'http://127.0.0.1:{p}',
+                )
             )
-        )
+
     except KeyboardInterrupt:
         click.echo("\nMachaao tunnel closed")
     
@@ -95,49 +105,72 @@ def tunnel(p, t):
             print(e)
             print("Contact: support@messengerx.io")
 
+
 @click.command()
 def version():
     click.echo("v0.1.4")
+
 
 @click.command()
 @click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
 @click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
 def run(p, t):
 
-    print(f'Incoming server params: {p}....... {t}')
+    print(f'Incoming server run params: {p}, {t}')
 
-    print("Running.... Stream2")
-    # stream2 = check_output(f"machaao tunnel -p {p} -t {t}", stderr=STDOUT, shell=True)
+    print(f"validating chatbot request...")
 
-    # stream2 = os.popen(f"machaao tunnel -p {p} -t {t}")
+    _p = subprocess.check_output(["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
-    # tunnel(p, t)
+    validated = False
+    if _p:
+        try:
+            _p = _p.decode("utf-8").strip()
 
-    os.system(f"machaao tunnel -p {p} -t {t}")
+            if "messengerx.io" in _p:
+                validated = True
+                print(f"validated: {_p}")
+        except Exception as e:
+            print(str(e))
+            validated = False
 
-    stream1 = os.popen('python3 chatbot.py')
+    if validated:
 
-    print("opening stream2")
+        try:
+            print(f"initializing a chatbot for {_p}")
 
-    # print(stream1.read())
-    # stream2 = os.popen(f"machaao tunnel -p {p} -t {t}")
+            _tunnel_p = subprocess.Popen(f"machaao tunnel -p {p} -t {t}", stderr=subprocess.STDOUT, shell=True)
 
-    # headers = {
-    #     "api_token": t,
-    #     "Content-Type": "application/json",
-    # }
+            print(f"initializing tunnels for chatbot for {_p}...")
 
-    # payload = {
-    #     "url": str(stream2)+"machaao/incoming"
-    # }
+            _chatbot_p = subprocess.Popen(f"python3 chatbot.py", stderr=subprocess.STDOUT, shell=True)
 
-    # request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+            print(f"chatbot for {_p} is starting...")
+
+            headers = {
+                "api_token": t,
+                "Content-Type": "application/json",
+            }
+
+            payload = {
+                "url": f"https://{_p}/machaao/incoming"
+            }
+
+            print("pending update / hook / payload for call to ---" + str(payload))
+
+            # request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+
+        except Exception as e:
+            print(str(e))
+
+
+    else:
+        print("oops, invalid request -- you being naughty my friend...")
 
 cli.add_command(startproject)
 cli.add_command(tunnel)
 cli.add_command(run)
 cli.add_command(version)
-
 
 
 if __name__ == '__main__':
