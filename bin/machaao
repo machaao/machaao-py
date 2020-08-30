@@ -8,6 +8,7 @@ import machaao
 import asyncio
 from requests import request
 from json import dumps
+from subprocess import check_output, STDOUT
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
@@ -64,6 +65,8 @@ def startproject(s):
 @click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
 def tunnel(p, t):
 
+    print(f'Incoming tunnel params: {p}....... {t}')
+
     machaao_token = None
 
     if t != None:
@@ -100,24 +103,35 @@ def version():
 @click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
 @click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
 def run(p, t):
+
+    print(f'Incoming server params: {p}....... {t}')
+
+    print("Running.... Stream2")
+    # stream2 = check_output(f"machaao tunnel -p {p} -t {t}", stderr=STDOUT, shell=True)
+
+    # stream2 = os.popen(f"machaao tunnel -p {p} -t {t}")
+
+    # tunnel(p, t)
+
+    os.system(f"machaao tunnel -p {p} -t {t}")
+
     stream1 = os.popen('python3 chatbot.py')
-    stream2 = os.popen(f'machaao tunnel -p {p} -t {t}')
 
-    headers = {
-        "api_token": t,
-        "Content-Type": "application/json",
-    }
+    print("opening stream2")
 
-    payload = {
-        "url": stream2+"machaao/incoming"
-    }
+    # print(stream1.read())
+    # stream2 = os.popen(f"machaao tunnel -p {p} -t {t}")
 
-    request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+    # headers = {
+    #     "api_token": t,
+    #     "Content-Type": "application/json",
+    # }
 
+    # payload = {
+    #     "url": str(stream2)+"machaao/incoming"
+    # }
 
-
-    print(stream1)
-    print(stream2)
+    # request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
 
 cli.add_command(startproject)
 cli.add_command(tunnel)
