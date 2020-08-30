@@ -31,7 +31,7 @@ def cli():
 
     Here is an example:
 
-    1. machaao startproject -n sample-chatbot
+    1. machaao start -n sample-chatbot
 
     2. machaao tunnel -p [PORT] # If chatbot token is saved on path.
 
@@ -45,7 +45,7 @@ def cli():
 
 @click.command()
 @click.option('-n', type=str, default='5000', help="Enter the name of project.")
-def startproject(s):
+def start(s):
 
     path = os.path.join(CURR_DIR, s)
 
@@ -167,7 +167,8 @@ def run(p, t):
     else:
         print("oops, invalid request -- you being naughty my friend...")
 
-cli.add_command(startproject)
+
+cli.add_command(start)
 cli.add_command(tunnel)
 cli.add_command(run)
 cli.add_command(version)
