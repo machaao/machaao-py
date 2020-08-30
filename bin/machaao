@@ -6,6 +6,8 @@ import os
 from shutil import copytree, copy
 import machaao
 import asyncio
+from requests import request
+from json import dumps
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
@@ -92,11 +94,36 @@ def tunnel(p, t):
 
 @click.command()
 def version():
-    click.echo("v0.1.5")
+    click.echo("v0.1.4")
+
+@click.command()
+@click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
+@click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
+def run(p, t):
+    stream1 = os.popen('python3 chatbot.py')
+    stream2 = os.popen(f'machaao tunnel -p {p} -t {t}')
+
+    headers = {
+        "api_token": t,
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "url": stream2+"machaao/incoming"
+    }
+
+    request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+
+
+
+    print(stream1)
+    print(stream2)
 
 cli.add_command(startproject)
 cli.add_command(tunnel)
+cli.add_command(run)
 cli.add_command(version)
+
 
 
 if __name__ == '__main__':
