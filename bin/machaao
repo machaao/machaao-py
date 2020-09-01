@@ -158,8 +158,11 @@ def run(p, t):
 
             print("pending update / hook / payload for call to ---" + str(payload))
 
-            # request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
-
+            request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+        
+        except KeyboardInterrupt:
+            os.kill(_chatbot_p.pid)
+        
         except Exception as e:
             print(str(e))
 
