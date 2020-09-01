@@ -12,14 +12,14 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print("0.1.6")
+        print("0.1.7")
         return
     
     if not args.port:
         print("Please specify -p/--port argument and port.")
         return
 
-    username = getuser()
+    # username = getuser()
 
     loop = asyncio.get_event_loop()
     try:

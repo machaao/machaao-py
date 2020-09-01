@@ -36,12 +36,12 @@ MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
 MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com" [for development purposes]
 ```
 
-### Run the bot and it should now avaiable 
+### Run the following for machaao to do it's magic.
 ```bash
 machaao run -p 5000 -t [CHATBOT-TOKEN]
 ```
 
-###  https://dev.messengerx.io/<chatbot_name> to send a message to your chatbot.
+Your bot should now be available @ [https://dev.messengerx.io/<chatbot_name>] to send a message to your chatbot.
 
 ### Your chatbot is now ready to start receiving incoming messages from users
 ```bash

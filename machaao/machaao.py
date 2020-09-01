@@ -122,7 +122,6 @@ def get_user_tags(api_token, base_url ,user_id):
     return request("GET", url,headers=headers)
 
 def request_handler(request):
-
     api_token = request.headers["api_token"]
     user_id = request.headers["user_id"]
 
@@ -145,12 +144,13 @@ def request_handler(request):
         "messaging": messaging
     }
 
+
 def send_message(api_token, base_url, payload):
     url = base_url + "/v1/messages/send"
 
     headers = {
         "api_token": api_token,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
     }
 
     return request("POST", url, data=json.dumps(payload), headers=headers)
