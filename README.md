@@ -35,6 +35,21 @@ cd <project_name>
 MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
 MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com" [for development purposes]
 ```
+
+### Run the bot and it should now avaiable 
+```bash
+machaao run -p 5000 -t [CHATBOT-TOKEN]
+```
+
+###  https://dev.messengerx.io/<chatbot_name> to send a message to your chatbot.
+
+### Your chatbot is now ready to start receiving incoming messages from users
+```bash
+# HappyCoding
+```
+
+## Optional 
+
 ### Run Machaao Tunnel in a seperate terminal and note down your FORWARDING URL
 ```bash
 machaao tunnel -p 5000 -t [CHATBOT-TOKEN]
@@ -57,12 +72,6 @@ python3 chatbot.py
 python chatbot.py
 ```
 
-###  https://dev.messengerx.io/<chatbot_name> to send a message to your chatbot.
 
-
-### Your chatbot is now ready to start receiving incoming messages from users
-```bash
-# HappyCoding
-```
 
 #### NOTE: UNDER ACTIVE DEVELOPMENT (ACCEPTING PULL REQUESTS)
