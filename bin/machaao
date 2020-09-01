@@ -105,6 +105,7 @@ def tunnel(p, t, h):
     except Exception as e:
         if int(str(e)[6:11])== 1006:
             click.echo("\nDisconnected from MX")
+            signal.signal(signal.SIGINT, exit_gracefully)
         else:
             print(e)
             print("Contact: support@messengerx.io")
