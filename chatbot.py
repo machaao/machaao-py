@@ -3,6 +3,7 @@ from flask_api import FlaskAPI, status
 import requests
 import re
 import json
+import argparse
 
 from machaao import request_handler, send_message
 
@@ -67,4 +68,13 @@ def messageHandler():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    parser = argparse.ArgumentParser(description='A simple Machaao Chatbot')
+    parser.add_argument('-p', '--port', type=int, default=False, help='Port number of the local server')
+    # parser.add_argument
+    args = parser.parse_args()
+    if args.port:
+        _port = args.port
+        print(f"starting at {_port}")
+        app.run(host="0.0.0.0", port=_port)
+    else:
+        app.run(host="0.0.0.0")
