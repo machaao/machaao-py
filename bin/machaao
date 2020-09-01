@@ -9,11 +9,15 @@ import asyncio
 from requests import request
 from json import dumps
 import subprocess
+import shlex
+import signal
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
 CURR_DIR = os.path.abspath(os.getcwd())
 
+_tunnel_p = None
+_chatbot_p = None
 
 def copyany(src, dst):
     try:
@@ -100,15 +104,21 @@ def tunnel(p, t, h):
     
     except Exception as e:
         if int(str(e)[6:11])== 1006:
-            click.echo("\nChatbot Token Incorrect")
+            click.echo("\nDisconnected from MX")
         else:
             print(e)
             print("Contact: support@messengerx.io")
 
+#
+# def sigterm_handler(signal, frame):
+#     # save the state here or do whatever you want
+#     print('booyah! bye bye')
+#     sys.exit(0)
+
 
 @click.command()
 def version():
-    click.echo("v0.1.4")
+    click.echo("v0.1.5")
 
 
 @click.command()
@@ -135,15 +145,17 @@ def run(p, t):
             validated = False
 
     if validated:
-
         try:
             print(f"initializing a chatbot for {_p}")
 
-            _tunnel_p = subprocess.Popen(f"machaao tunnel -p {p} -t {t}", stderr=subprocess.STDOUT, shell=True)
+            # _tunnel_port = eval(p) + 1
 
-            print(f"initializing tunnels for chatbot for {_p}...")
+            print(f"initializing tunnels for chatbot for {_p}:{p}")
 
-            _chatbot_p = subprocess.Popen(f"python3 chatbot.py", stderr=subprocess.STDOUT, shell=True)
+            _children = []
+            _tunnel_p = subprocess.Popen(shlex.split(f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
+
+            _chatbot_p = subprocess.Popen(shlex.split(f"python3 chatbot.py -p {p}"), stderr=subprocess.STDOUT)
 
             print(f"chatbot for {_p} is starting...")
 
@@ -156,7 +168,12 @@ def run(p, t):
                 "url": f"https://{_p}/machaao/incoming"
             }
 
-            print("pending update / hook / payload for call to ---" + str(payload))
+            _chatbot_p.wait()
+
+
+
+
+            # print("pending update / hook / payload for call to ---" + str(payload))
 
             # request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
 
@@ -174,5 +191,18 @@ cli.add_command(run)
 cli.add_command(version)
 
 
+def exit_gracefully(signal, frame):
+    if _tunnel_p:
+        print("terminating tunnel....")
+        _tunnel_p.send_signal(signal.SIGINT)
+
+    if _chatbot_p:
+        print("terminating chatbot....")
+        _chatbot_p.send_signal(signal.SIGINT)
+
+    sys.exit(0)
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, exit_gracefully)
     cli()
