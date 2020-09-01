@@ -1,7 +1,7 @@
 # machaao - make personalized chatbots that scale
 [![codebeat badge](https://codebeat.co/badges/9ddf5add-675b-4816-8209-45cf29e686a3)](https://codebeat.co/projects/github-com-machaao-machaao-py-master)
 [![Gitter](https://badges.gitter.im/messengerx-io/community.svg)](https://gitter.im/messengerx-io/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)  
-An easy to use module for python developers looking to build, prototype and publish chat apps
+A single command module for python developers looking to build, prototype and publish production scale chatbots
 
 ### Minimum Requirements
 ```bash
