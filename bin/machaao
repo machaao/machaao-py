@@ -119,7 +119,7 @@ def tunnel(p, t, h):
 
 @click.command()
 def version():
-    click.echo("v0.1.7")
+    click.echo("v0.1.8")
 
 
 @click.command()
