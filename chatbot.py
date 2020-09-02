@@ -1,3 +1,7 @@
+# Bot Template: A simple sample echo bot to get started.
+# Platform: MessengerX.io
+# Author: @Abhishek Raj
+
 from flask import request, jsonify, Response
 from flask_api import FlaskAPI, status
 import requests
@@ -25,7 +29,7 @@ def health_check():
     return jsonify(ret)
 
 
-@app.route("/machaao/incoming", methods=["GET", "POST"])
+@app.route("/machaao/incoming", methods=["POST"])
 def messageHandler():
     """
     Incoming message handler.
@@ -49,6 +53,9 @@ def messageHandler():
         "users": [user_id],
         "message": {"text": message},
     }
+
+    print(f"sending message -> using token: {MESSENGERX_API_TOKEN}, base_url: {MESSENGERX_BASE_URL}")
+
 
     # Read more about APIs here: https://ganglia.machaao.com/api-docs/#/
     # or here https://messengerx.readthedocs.io/en/latest/ or here

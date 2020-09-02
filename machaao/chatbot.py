@@ -1,8 +1,13 @@
+# Bot Template: A simple sample echo bot to get started.
+# Platform: MessengerX.io
+# Author: @Abhishek Raj
+
 from flask import request, jsonify, Response
 from flask_api import FlaskAPI, status
 import requests
 import re
 import json
+import argparse
 
 from machaao import request_handler, send_message
 
@@ -24,7 +29,7 @@ def health_check():
     return jsonify(ret)
 
 
-@app.route("/machaao/incoming", methods=["GET", "POST"])
+@app.route("/machaao/incoming", methods=["POST"])
 def messageHandler():
     """
     Incoming message handler.
@@ -49,9 +54,12 @@ def messageHandler():
         "message": {"text": message},
     }
 
+    print(f"sending message -> using token: {MESSENGERX_API_TOKEN}, base_url: {MESSENGERX_BASE_URL}")
+
+
     # Read more about APIs here: https://ganglia.machaao.com/api-docs/#/
     # or here https://messengerx.readthedocs.io/en/latest/ or here
-    # https://github.com/machaao/machaao-py 
+    # https://github.com/machaao/machaao-py
     response = send_message(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL, payload)
 
     output_payload = {
@@ -67,4 +75,13 @@ def messageHandler():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    parser = argparse.ArgumentParser(description='A simple Machaao Chatbot')
+    parser.add_argument('-p', '--port', type=int, default=False, help='Port number of the local server')
+    # parser.add_argument
+    args = parser.parse_args()
+    if args.port:
+        _port = args.port
+        print(f"starting at {_port}")
+        app.run(host="0.0.0.0", port=_port)
+    else:
+        app.run(host="0.0.0.0")

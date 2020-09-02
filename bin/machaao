@@ -105,6 +105,7 @@ def tunnel(p, t, h):
     except Exception as e:
         if int(str(e)[6:11])== 1006:
             click.echo("\nDisconnected from MX")
+            signal.signal(signal.SIGINT, exit_gracefully)
         else:
             print(e)
             print("Contact: support@messengerx.io")
@@ -118,7 +119,7 @@ def tunnel(p, t, h):
 
 @click.command()
 def version():
-    click.echo("v0.1.5")
+    click.echo("v0.1.7")
 
 
 @click.command()
@@ -126,9 +127,9 @@ def version():
 @click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
 def run(p, t):
 
-    print(f'Incoming server run params: {p}, {t}')
+    # print(f'Incoming server run params: {p}, {t}')
 
-    print(f"validating chatbot request...")
+    click.echo(f"validating & initializing chatbot, please wait... (can take a minute or so)")
 
     _p = subprocess.check_output(["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
@@ -136,28 +137,29 @@ def run(p, t):
     if _p:
         try:
             _p = _p.decode("utf-8").strip()
-
             if "messengerx.io" in _p:
                 validated = True
-                print(f"validated: {_p}")
+                click.echo(f"validated: {_p}")
         except Exception as e:
             print(str(e))
             validated = False
 
     if validated:
         try:
-            print(f"initializing a chatbot for {_p}")
+            click.echo(f"initializing a chatbot for {_p}")
 
             # _tunnel_port = eval(p) + 1
 
-            print(f"initializing tunnels for chatbot for {_p}:{p}")
+            click.echo(f"initializing tunnels for chatbot for {_p}:{p}")
 
             _children = []
             _tunnel_p = subprocess.Popen(shlex.split(f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
 
             _chatbot_p = subprocess.Popen(shlex.split(f"python3 chatbot.py -p {p}"), stderr=subprocess.STDOUT)
 
-            print(f"chatbot for {_p} is starting...")
+            click.echo(f"chatbot for {_p} is starting...")
+
+            chatbot_url = f"https://{_p}/machaao/incoming"
 
             headers = {
                 "api_token": t,
@@ -165,27 +167,25 @@ def run(p, t):
             }
 
             payload = {
-                "url": f"https://{_p}/machaao/incoming"
+                "url": chatbot_url
             }
+
+            click.echo(f"updating the new hook for call to - {chatbot_url}")
+
+            request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+
+            _bot_name = _p.replace(".tunnel.messengerx.io", "")
+
+            click.echo(click.style(f"your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
 
             _chatbot_p.wait()
 
-
-
-
-            # print("pending update / hook / payload for call to ---" + str(payload))
-
-            request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
-        
-        except KeyboardInterrupt:
-            os.kill(_chatbot_p.pid)
-        
         except Exception as e:
             print(str(e))
 
 
     else:
-        print("oops, invalid request -- you being naughty my friend...")
+        click.echo("oops, invalid request -- you being naughty my friend...")
 
 
 cli.add_command(start)
@@ -196,11 +196,11 @@ cli.add_command(version)
 
 def exit_gracefully(signal, frame):
     if _tunnel_p:
-        print("terminating tunnel....")
+        click.echo("terminating tunnel....")
         _tunnel_p.send_signal(signal.SIGINT)
 
     if _chatbot_p:
-        print("terminating chatbot....")
+        click.echo("terminating chatbot....")
         _chatbot_p.send_signal(signal.SIGINT)
 
     sys.exit(0)
