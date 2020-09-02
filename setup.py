@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="machaao",
-    version="0.1.7",
+    version="0.1.8",
     author="Abhishek Raj",
     author_email="abhishek@machaao.com",
-    description="An easy to use module for python developers looking to build and develop chat apps using MessengerX.io",
+    description="A module for python developers looking to build, prototype & deploy deeply personalized chatbots",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/machaao/machaao-py",

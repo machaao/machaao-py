@@ -12,7 +12,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print("0.1.7")
+        print("0.1.8")
         return
     
     if not args.port:
