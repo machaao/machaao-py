@@ -48,7 +48,7 @@ def cli():
 
 
 @click.command()
-@click.option('-n', type=str, default='5000', help="Enter the name of project.")
+@click.option('-n', type=str, default='.', help="Enter the name of project.")
 def start(s):
 
     path = os.path.join(CURR_DIR, s)
@@ -77,7 +77,7 @@ def tunnel(p, t, h):
     if t == None:
         machaao_token = os.getenv("MessengerXAPIToken", None)
         if machaao_token is None:
-            sys.exit("Chatbot token not set")
+            sys.exit(" * Chatbot token not set")
 
 
     #Not the right way of doing it only doing it for testing.
@@ -91,7 +91,7 @@ def tunnel(p, t, h):
             host = loop.run_until_complete(machaao.generate_host_url(ws_uri=_ws_uri))
             click.echo(str(host))
         else:
-            print(f'Incoming tunnel params: {p}....... {t}')
+            # print(f'Incoming tunnel params: {p}....... {t}')
             loop.run_until_complete(
                 machaao.open_tunnel(
                     ws_uri=_ws_uri,
@@ -119,7 +119,7 @@ def tunnel(p, t, h):
 
 @click.command()
 def version():
-    click.echo("v0.1.8")
+    click.echo("v0.1.9")
 
 
 @click.command()
@@ -129,7 +129,20 @@ def run(p, t):
 
     # print(f'Incoming server run params: {p}, {t}')
 
-    click.echo(f"validating & initializing chatbot, please wait... (can take a minute or so)")
+    _isPy = False
+    _isGo = False
+
+    if os.path.exists("chatbot.py"):
+        _isPy = True
+
+    elif os.path.exists("chatbot"):
+        os.environ["PORT"] = p
+        _isGo = True
+
+    else:
+        sys.exit(' * Chatbot file not present in directory')
+
+    click.echo(f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
 
     _p = subprocess.check_output(["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
@@ -139,25 +152,33 @@ def run(p, t):
             _p = _p.decode("utf-8").strip()
             if "messengerx.io" in _p:
                 validated = True
-                click.echo(f"validated: {_p}")
+                click.echo(f" * Validated: {_p}")
         except Exception as e:
             print(str(e))
             validated = False
 
     if validated:
+
         try:
-            click.echo(f"initializing a chatbot for {_p}")
+            click.echo(f" * Initializing a chatbot for {_p}")
 
             # _tunnel_port = eval(p) + 1
 
-            click.echo(f"initializing tunnels for chatbot for {_p}:{p}")
+            click.echo(f" * Initializing tunnels for chatbot for {_p}:{p}")
 
             _children = []
             _tunnel_p = subprocess.Popen(shlex.split(f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
 
-            _chatbot_p = subprocess.Popen(shlex.split(f"python3 chatbot.py -p {p}"), stderr=subprocess.STDOUT)
+            _chatbot_p = None
 
-            click.echo(f"chatbot for {_p} is starting...")
+            if _isPy:
+                print("runing chatbot cmd")
+                _chatbot_p = subprocess.Popen(shlex.split(f'python3 chatbot.py -p {p}'), stderr=subprocess.STDOUT)
+            
+            if _isGo:
+                _chatbot_p = subprocess.Popen(shlex.split('./chatbot'), stderr=subprocess.STDOUT)
+
+            click.echo(f" * Chatbot for {_p} is starting...")
 
             chatbot_url = f"https://{_p}/machaao/incoming"
 
@@ -170,13 +191,13 @@ def run(p, t):
                 "url": chatbot_url
             }
 
-            click.echo(f"updating the new hook for call to - {chatbot_url}")
+            click.echo(f" * Updating the new hook for call to - {chatbot_url}")
 
             request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
 
             _bot_name = _p.replace(".tunnel.messengerx.io", "")
 
-            click.echo(click.style(f"your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
+            click.echo(click.style(f" * Your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
 
             _chatbot_p.wait()
 
@@ -185,7 +206,7 @@ def run(p, t):
 
 
     else:
-        click.echo("oops, invalid request -- you being naughty my friend...")
+        click.echo(" * oops, invalid request -- you being naughty my friend...")
 
 
 cli.add_command(start)
