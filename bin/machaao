@@ -49,16 +49,16 @@ def cli():
 
 @click.command()
 @click.option('-n', type=str, default='.', help="Enter the name of project.")
-def start(s):
+def start(n):
 
-    path = os.path.join(CURR_DIR, s)
+    path = os.path.join(CURR_DIR, n)
 
     try:
         os.mkdir(path)
     except OSError:
         raise SystemExit(0)
     
-    click.secho(f'Project {s} created...', fg="blue", bold=True)
+    click.secho(f'Project {n} created...', fg="blue", bold=True)
     copyany(FILE_DIR+"/chatbot.py", path+"/")
     click.secho(f'Copying files to project directory...', fg="green", bold=True)
     click.secho(f'Project Created, Keep Developing ChatBots', fg="blue", blink=True)
