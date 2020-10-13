@@ -22,7 +22,7 @@ pip install machaao
 
 ### Create new chatbot project
 ```bash
-machaao start -s <project_name>
+machaao start -n <project_name>
 ```
 
 ### Navigate to the newly created chatbot project directory
