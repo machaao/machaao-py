@@ -1,0 +1,3 @@
+#Experience with machaao
+
+My experience was pretty straight foward. Aside from the issues already resolved regarding the start() portion of the command line arguments, getting my bot ready to go was easy. I initially had some trouble as the "Create" button in MessengerX was still greyed out after I completed all the required fields. Once I got the token and updated the appropriate python file the bot was quickly up and running and repeating what I said. The process felt pretty straight forward and was of no challenge whatsoever.
