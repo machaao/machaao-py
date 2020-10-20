@@ -1,9 +1,9 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup(
+setup(
     name="machaao",
     version="0.1.9",
     author="Abhishek Raj",
@@ -12,7 +12,12 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/machaao/machaao-py",
-    packages=setuptools.find_packages(),
+    packages = find_packages(), 
+        entry_points ={ 
+            'console_scripts': [ 
+                'machaao = machaao.machaao:main'
+            ] 
+        }, 
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -32,5 +37,4 @@ setuptools.setup(
         "websockets",
         "aiohttp",
     ],
-    scripts=['bin/machaao']
 )

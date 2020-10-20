@@ -1,156 +1,229 @@
-from requests import request
-import json
-import httpx
+import click
+import sys
+import os
+from shutil import copytree, copy
+import machaao
 import asyncio
-import jwt
+from requests import request
+from json import dumps
+import subprocess
+import shlex
+import signal
+
+FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
+
+CURR_DIR = os.path.abspath(os.getcwd())
+
+_tunnel_p = None
+_chatbot_p = None
+
+def copyany(src, dst):
+    try:
+        copy(src, dst)
+    except OSError as exc:
+        click.secho(exc, fg="red", bold=True)
 
 
-def send(url, headers, payload):
-    return request("POST", url, data=json.dumps(payload), headers=headers)
+@click.group()
+def cli():
+    """
+    An easy to use module for python developers 
+    looking to build and develop chatbots using 
+    MACHAAO Platform. Provide the Project Name to start with the template.
+
+    Here is an example:
+
+    1. machaao start -n sample-chatbot
+
+    2. machaao tunnel -p [PORT] # If chatbot token is saved on path.
+
+    3. machaao tunnel -p [PORT] -t [TOKEN]
+
+    You need a valid FREE API key from https://messengerx.io for the server to work. You can
+    sign up for a free account at https://portal.messengerx.io.
+    """
+    pass
 
 
-async def send_async(url, headers, payload):
-    async with httpx.AsyncClient() as client:        
-        return (await client.post(url, data=json.dumps(payload), headers=headers))
+@click.command()
+@click.option('-n', type=str, default='.', help="Enter the name of project.")
+def start(n):
+
+    path = os.path.join(CURR_DIR, n)
+
+    try:
+        os.mkdir(path)
+    except OSError:
+        raise SystemExit(0)
+    
+    click.secho(f'Project {n} created...', fg="blue", bold=True)
+    copyany(FILE_DIR+"/chatbot.py", path+"/")
+    click.secho(f'Copying files to project directory...', fg="green", bold=True)
+    click.secho(f'Project Created, Keep Developing ChatBots', fg="blue", blink=True)
 
 
-def attach_tag_to_user(base_url, user_id, api_token, payload):
-    """ This function used to add tag to userId."""
+@click.command()
+@click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
+@click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
+@click.option('-h', type=int, default=None, help="get host name")
+def tunnel(p, t, h):
+    machaao_token = None
 
-    url = f"{base_url}/v1/users/tag/{user_id}"
+    if t != None:
+        machaao_token = t
 
-    headers = {
-        "api_token": api_token,  # token for the bot
-        "Content-Type": "application/json",
-    }
-
-    return asyncio.run(send_async(url, headers, payload))
-
-def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_token):
-    """ This function used to add tag to userId."""
-
-    url = f"{base_url}/v1/users/tag/{user_id}"
-
-    headers = {
-        "api_token": api_token,  # token for the bot
-        "Content-Type": "application/json",
-    }
-
-    payload = {
-        "tag": tag,
-        "displayName": displayName,
-        "values": values,
-        "active": eval(active)
-    }
-
-    return  asyncio.run(send_async(url, headers, payload))
+    if t == None:
+        machaao_token = os.getenv("MessengerXAPIToken", None)
+        if machaao_token is None:
+            sys.exit(" * Chatbot token not set")
 
 
-def insert_content(base_url, user_id, api_token, payload):
-    """Insert or update content for your bot"""
+    #Not the right way of doing it only doing it for testing.
+    _ws_uri = f'wss://mx.tunnel.messengerx.io/_ws/?username={machaao_token}&port={p}'
 
-    url = f"{base_url}/v1/content"
+    host = None
 
-    headers = {
-        "api_token": api_token,  # token for the bot
-        "Content-Type": "application/json",
-    }
+    loop = asyncio.get_event_loop()
+    try:
+        if h:
+            host = loop.run_until_complete(machaao.generate_host_url(ws_uri=_ws_uri))
+            click.echo(str(host))
+        else:
+            # print(f'Incoming tunnel params: {p}....... {t}')
+            loop.run_until_complete(
+                machaao.open_tunnel(
+                    ws_uri=_ws_uri,
+                    http_uri=f'http://127.0.0.1:{p}',
+                )
+            )
 
-    return asyncio.run(send_async(url, headers, payload))
+    except KeyboardInterrupt:
+        click.echo("\nMachaao tunnel closed")
+    
+    except Exception as e:
+        if int(str(e)[6:11])== 1006:
+            click.echo("\nDisconnected from MX")
+            signal.signal(signal.SIGINT, exit_gracefully)
+        else:
+            print(e)
+            print("Contact: support@messengerx.io")
 
-
-def get_user_profile(api_token, base_url, user_id):
-    """Get basic profile of the user"""
-
-    url = f'{base_url}/v1/users/{user_id}'
-
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json",
-    }
-
-    return request("GET", url,headers=headers)
-
-def content_search(api_token, base_url, query):
-    """Search content on your bot"""
-
-    url = f'{base_url}/v1/content/search?q={query}'
-
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json",
-    }
-
-    return request("GET", url,headers=headers)
-
-def content_search_via_slug(api_token, base_url, slug):
-    """Search content on your bot"""
-
-    url = f'{base_url}/v1/content/{slug}'
-
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json",
-    }
-
-    return request("GET", url,headers=headers)
+#
+# def sigterm_handler(signal, frame):
+#     # save the state here or do whatever you want
+#     print('booyah! bye bye')
+#     sys.exit(0)
 
 
-def send_announcement(base_url, api_token, payload):
-    """Send subscribed announcement"""
-
-    url = f"{base_url}/v1/messages/announce"
-
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json",
-    }
-
-    return asyncio.run(send_async(url, headers, payload))
+@click.command()
+def version():
+    click.echo("v0.1.9")
 
 
-def get_user_tags(api_token, base_url ,user_id):
-    """Get all tags for a specific userId"""
+@click.command()
+@click.option('-p', type=str, default='5000', help="Run tunnel to expose localhost to web.")
+@click.option('-t', type=str, default=None, help="Run tunnel to expose localhost to web.")
+def run(p, t):
 
-    url = f'{base_url} + "/v1/users/tags/{user_id}'
+    # print(f'Incoming server run params: {p}, {t}')
 
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json",
-    }
+    _isPy = False
+    _isGo = False
 
-    return request("GET", url,headers=headers)
+    if os.path.exists("chatbot.py"):
+        _isPy = True
 
-def request_handler(request):
-    api_token = request.headers["api_token"]
-    user_id = request.headers["user_id"]
+    elif os.path.exists("chatbot"):
+        os.environ["PORT"] = p
+        _isGo = True
 
-    raw = request.data.get("raw", "")
+    else:
+        sys.exit(' * Chatbot file not present in directory')
 
-    if raw != "":
-        input = jwt.decode(str(raw), api_token, algorithms=["HS512"])
-        sub = input.get("sub", None)
-        # print("Conditional")
-        if sub and type(sub) is dict:
-            sub = json.dumps(sub)
+    click.echo(f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
 
-        if sub:
-            decoded = json.loads(sub)
-            messaging = decoded.get("messaging", None)
+    _p = subprocess.check_output(["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
-    return {
-        "api_token": api_token,
-        "user_id": user_id,
-        "messaging": messaging
-    }
+    validated = False
+    if _p:
+        try:
+            _p = _p.decode("utf-8").strip()
+            if "messengerx.io" in _p:
+                validated = True
+                click.echo(f" * Validated: {_p}")
+        except Exception as e:
+            print(str(e))
+            validated = False
+
+    if validated:
+
+        try:
+            click.echo(f" * Initializing a chatbot for {_p}")
+
+            # _tunnel_port = eval(p) + 1
+
+            click.echo(f" * Initializing tunnels for chatbot for {_p}:{p}")
+
+            _children = []
+            _tunnel_p = subprocess.Popen(shlex.split(f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
+
+            _chatbot_p = None
+
+            if _isPy:
+                print("runing chatbot cmd")
+                _chatbot_p = subprocess.Popen(shlex.split(f'python3 chatbot.py -p {p}'), stderr=subprocess.STDOUT)
+            
+            if _isGo:
+                _chatbot_p = subprocess.Popen(shlex.split('./chatbot'), stderr=subprocess.STDOUT)
+
+            click.echo(f" * Chatbot for {_p} is starting...")
+
+            chatbot_url = f"https://{_p}/machaao/incoming"
+
+            headers = {
+                "api_token": t,
+                "Content-Type": "application/json",
+            }
+
+            payload = {
+                "url": chatbot_url
+            }
+
+            click.echo(f" * Updating the new hook for call to - {chatbot_url}")
+
+            request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+
+            _bot_name = _p.replace(".tunnel.messengerx.io", "")
+
+            click.echo(click.style(f" * Your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
+
+            _chatbot_p.wait()
+
+        except Exception as e:
+            print(str(e))
 
 
-def send_message(api_token, base_url, payload):
-    url = base_url + "/v1/messages/send"
+    else:
+        click.echo(" * oops, invalid request -- you being naughty my friend...")
 
-    headers = {
-        "api_token": api_token,
-        "Content-Type": "application/json"
-    }
 
-    return request("POST", url, data=json.dumps(payload), headers=headers)
+cli.add_command(start)
+cli.add_command(tunnel)
+cli.add_command(run)
+cli.add_command(version)
+
+
+def exit_gracefully(signal, frame):
+    if _tunnel_p:
+        click.echo("terminating tunnel....")
+        _tunnel_p.send_signal(signal.SIGINT)
+
+    if _chatbot_p:
+        click.echo("terminating chatbot....")
+        _chatbot_p.send_signal(signal.SIGINT)
+
+    sys.exit(0)
+
+def main():
+    signal.signal(signal.SIGINT, exit_gracefully)
+    cli()
