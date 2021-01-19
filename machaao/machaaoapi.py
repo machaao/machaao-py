@@ -10,7 +10,7 @@ def send(url, headers, payload):
 
 
 async def send_async(url, headers, payload):
-    async with httpx.AsyncClient() as client:        
+    async with httpx.AsyncClient() as client:
         return (await client.post(url, data=json.dumps(payload), headers=headers))
 
 
@@ -25,6 +25,7 @@ def attach_tag_to_user(base_url, user_id, api_token, payload):
     }
 
     return asyncio.run(send_async(url, headers, payload))
+
 
 def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_token):
     """ This function used to add tag to userId."""
@@ -43,7 +44,7 @@ def set_tag_for_user(base_url, user_id, tag, displayName, values, active, api_to
         "active": eval(active)
     }
 
-    return  asyncio.run(send_async(url, headers, payload))
+    return asyncio.run(send_async(url, headers, payload))
 
 
 def insert_content(base_url, user_id, api_token, payload):
@@ -69,7 +70,8 @@ def get_user_profile(api_token, base_url, user_id):
         "Content-Type": "application/json",
     }
 
-    return request("GET", url,headers=headers)
+    return request("GET", url, headers=headers)
+
 
 def content_search(api_token, base_url, query):
     """Search content on your bot"""
@@ -81,7 +83,8 @@ def content_search(api_token, base_url, query):
         "Content-Type": "application/json",
     }
 
-    return request("GET", url,headers=headers)
+    return request("GET", url, headers=headers)
+
 
 def content_search_via_slug(api_token, base_url, slug):
     """Search content on your bot"""
@@ -93,7 +96,7 @@ def content_search_via_slug(api_token, base_url, slug):
         "Content-Type": "application/json",
     }
 
-    return request("GET", url,headers=headers)
+    return request("GET", url, headers=headers)
 
 
 def send_announcement(base_url, api_token, payload):
@@ -109,7 +112,7 @@ def send_announcement(base_url, api_token, payload):
     return asyncio.run(send_async(url, headers, payload))
 
 
-def get_user_tags(api_token, base_url ,user_id):
+def get_user_tags(api_token, base_url, user_id):
     """Get all tags for a specific userId"""
 
     url = f'{base_url} + "/v1/users/tags/{user_id}'
@@ -119,7 +122,8 @@ def get_user_tags(api_token, base_url ,user_id):
         "Content-Type": "application/json",
     }
 
-    return request("GET", url,headers=headers)
+    return request("GET", url, headers=headers)
+
 
 def request_handler(request):
     api_token = request.headers["api_token"]
