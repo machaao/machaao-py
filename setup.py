@@ -5,19 +5,19 @@ with open("README.md", "r") as fh:
 
 setup(
     name="machaao",
-    version="0.2.0",
+    version="0.3.0",
     author="Abhishek Raj",
     author_email="abhishek@machaao.com",
     description="A module for python developers looking to build, prototype & deploy deeply personalized chatbots",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/machaao/machaao-py",
-    packages = find_packages(), 
-        entry_points ={ 
-            'console_scripts': [ 
+    packages=find_packages(),
+        entry_points={
+            'console_scripts': [
                 'machaao = machaao.machaao:main'
-            ] 
-        }, 
+            ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

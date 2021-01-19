@@ -2,14 +2,14 @@
 # Platform: MessengerX.io
 # Author: @Abhishek Raj
 
-from flask import request, jsonify, Response
+from flask import request, Response
 from flask_api import FlaskAPI, status
 import requests
 import re
 import json
 import argparse
 
-from machaao import request_handler, send_message
+from machaao import Machaao
 
 app = FlaskAPI(__name__)
 
@@ -19,14 +19,14 @@ MESSENGERX_API_TOKEN = ""
 # For development use https://ganglia-dev.machaao.com
 MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com"
 
+machaao = Machaao(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL)
 
 @app.route("/health")
 def health_check():
     """
     Function to check, server running or not.
     """
-    ret = {"Status": 200, "Msg": "Service is Up"}
-    return jsonify(ret)
+    return {"status": 200, "msg": "Service is Up"}
 
 
 @app.route("/machaao/incoming", methods=["POST"])
@@ -37,7 +37,7 @@ def messageHandler():
 
     # Edit this function the way you want.
 
-    incoming_data = request_handler(request)
+    incoming_data = machaao.request_handler(request)
 
     user_id = incoming_data["user_id"]
 
@@ -54,13 +54,11 @@ def messageHandler():
         "message": {"text": message},
     }
 
-    print(f"sending message -> using token: {MESSENGERX_API_TOKEN}, base_url: {MESSENGERX_BASE_URL}")
-
-
     # Read more about APIs here: https://ganglia.machaao.com/api-docs/#/
     # or here https://messengerx.readthedocs.io/en/latest/ or here
     # https://github.com/machaao/machaao-py
-    response = send_message(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL, payload)
+
+    response = machaao.send_message(payload)
 
     output_payload = {
         "success": True,
@@ -76,8 +74,8 @@ def messageHandler():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A simple Machaao Chatbot')
-    parser.add_argument('-p', '--port', type=int, default=False, help='Port number of the local server')
-    # parser.add_argument
+    parser.add_argument('-p', '--port', type=int, default=False,
+                        help='Port number of the local server')
     args = parser.parse_args()
     if args.port:
         _port = args.port

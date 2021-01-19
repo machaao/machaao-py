@@ -17,6 +17,7 @@ CURR_DIR = os.path.abspath(os.getcwd())
 _tunnel_p = None
 _chatbot_p = None
 
+
 def copyany(src, dst):
     try:
         copy(src, dst)
@@ -55,7 +56,7 @@ def start(n):
         os.mkdir(path)
     except OSError:
         raise SystemExit(0)
-    
+
     click.secho(f'Project {n} created...', fg="blue", bold=True)
     copyany(FILE_DIR+"/chatbot.py", path+"/")
     click.secho(f'Copying files to project directory...', fg="green", bold=True)
@@ -73,12 +74,11 @@ def tunnel(p, t, h):
         machaao_token = t
 
     if t == None:
-        machaao_token = os.getenv("MessengerXAPIToken", None)
+        machaao_token = os.getenv("MESSENGERX_API_TOKEN", None)
         if machaao_token is None:
             sys.exit(" * Chatbot token not set")
 
-
-    #Not the right way of doing it only doing it for testing.
+    # Not the right way of doing it only doing it for testing.
     _ws_uri = f'wss://mx.tunnel.messengerx.io/_ws/?username={machaao_token}&port={p}'
 
     host = None
@@ -86,7 +86,8 @@ def tunnel(p, t, h):
     loop = asyncio.get_event_loop()
     try:
         if h:
-            host = loop.run_until_complete(machaao.generate_host_url(ws_uri=_ws_uri))
+            host = loop.run_until_complete(
+                machaao.generate_host_url(ws_uri=_ws_uri))
             click.echo(str(host))
         else:
             # print(f'Incoming tunnel params: {p}....... {t}')
@@ -99,9 +100,9 @@ def tunnel(p, t, h):
 
     except KeyboardInterrupt:
         click.echo("\nMachaao tunnel closed")
-    
+
     except Exception as e:
-        if int(str(e)[6:11])== 1006:
+        if int(str(e)[6:11]) == 1006:
             click.echo("\nDisconnected from MX")
             signal.signal(signal.SIGINT, exit_gracefully)
         else:
@@ -140,9 +141,11 @@ def run(p, t):
     else:
         sys.exit(' * Chatbot file not present in directory')
 
-    click.echo(f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
+    click.echo(
+        f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
 
-    _p = subprocess.check_output(["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
+    _p = subprocess.check_output(
+        ["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
     validated = False
     if _p:
@@ -165,16 +168,19 @@ def run(p, t):
             click.echo(f" * Initializing tunnels for chatbot for {_p}:{p}")
 
             _children = []
-            _tunnel_p = subprocess.Popen(shlex.split(f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
+            _tunnel_p = subprocess.Popen(shlex.split(
+                f"machaao tunnel -p {p} -t {t}"), stderr=subprocess.STDOUT)
 
             _chatbot_p = None
 
             if _isPy:
                 print("runing chatbot cmd")
-                _chatbot_p = subprocess.Popen(shlex.split(f'python3 chatbot.py -p {p}'), stderr=subprocess.STDOUT)
-            
+                _chatbot_p = subprocess.Popen(shlex.split(
+                    f'python3 chatbot.py -p {p}'), stderr=subprocess.STDOUT)
+
             if _isGo:
-                _chatbot_p = subprocess.Popen(shlex.split('./chatbot'), stderr=subprocess.STDOUT)
+                _chatbot_p = subprocess.Popen(shlex.split(
+                    './chatbot'), stderr=subprocess.STDOUT)
 
             click.echo(f" * Chatbot for {_p} is starting...")
 
@@ -191,17 +197,18 @@ def run(p, t):
 
             click.echo(f" * Updating the new hook for call to - {chatbot_url}")
 
-            request("POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+            request(
+                "POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
 
             _bot_name = _p.replace(".tunnel.messengerx.io", "")
 
-            click.echo(click.style(f" * Your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
+            click.echo(click.style(
+                f" * Your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
 
             _chatbot_p.wait()
 
         except Exception as e:
             print(str(e))
-
 
     else:
         click.echo(" * oops, invalid request -- you being naughty my friend...")
@@ -223,6 +230,7 @@ def exit_gracefully(signal, frame):
         _chatbot_p.send_signal(signal.SIGINT)
 
     sys.exit(0)
+
 
 def main():
     signal.signal(signal.SIGINT, exit_gracefully)
