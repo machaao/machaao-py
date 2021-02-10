@@ -21,14 +21,6 @@ MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com"
 
 machaao = Machaao(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL)
 
-@app.route("/health")
-def health_check():
-    """
-    Function to check, server running or not.
-    """
-    return {"status": 200, "msg": "Service is Up"}
-
-
 @app.route("/machaao/incoming", methods=["POST"])
 def messageHandler():
     """
