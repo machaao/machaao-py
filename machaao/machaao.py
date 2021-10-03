@@ -9,10 +9,13 @@ from json import dumps
 import subprocess
 import shlex
 import signal
+import platform
 
 FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
 CURR_DIR = os.path.abspath(os.getcwd())
+
+OS = platform.system()
 
 _tunnel_p = None
 _chatbot_p = None
@@ -144,8 +147,12 @@ def run(p, t):
     click.echo(
         f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
 
-    _p = subprocess.check_output(
-        ["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
+    if 'Windows' in OS:
+        _p = subprocess.check_output(
+            ["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT, shell=True)
+    else:
+        _p = subprocess.check_output(
+            ["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT)
 
     validated = False
     if _p:
