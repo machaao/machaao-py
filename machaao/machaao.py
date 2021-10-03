@@ -15,7 +15,8 @@ FILE_DIR = os.path.dirname(os.path.abspath(machaao.__file__))
 
 CURR_DIR = os.path.abspath(os.getcwd())
 
-OS = platform.system()
+OS = str(platform.system()).lower()
+
 
 _tunnel_p = None
 _chatbot_p = None
@@ -59,11 +60,11 @@ def start(n):
         os.mkdir(path)
     except OSError:
         raise SystemExit(0)
-
+    click.echo(f"initiating for {OS}")
     click.secho(f'Project {n} created...', fg="blue", bold=True)
     copyany(FILE_DIR+"/chatbot.py", path+"/")
     click.secho(f'Copying files to project directory...', fg="green", bold=True)
-    click.secho(f'Project Created, Keep Developing ChatBots', fg="blue", blink=True)
+    click.secho(f'Project Created, Keep Developing Chat Bots', fg="blue", blink=True)
 
 
 @click.command()
@@ -121,7 +122,7 @@ def tunnel(p, t, h):
 
 @click.command()
 def version():
-    click.echo("v0.3.1")
+    click.echo("v0.3.2")
 
 
 @click.command()
@@ -145,7 +146,7 @@ def run(p, t):
         sys.exit(' * Chatbot file not present in directory')
 
     click.echo(
-        f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
+        f" * Validating & initializing chatbot for {OS}, please wait... (can take a minute or so)")
 
     if OS and 'Windows' in OS:
         _p = subprocess.check_output(
