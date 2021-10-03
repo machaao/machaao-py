@@ -147,7 +147,7 @@ def run(p, t):
     click.echo(
         f" * Validating & initializing chatbot, please wait... (can take a minute or so)")
 
-    if 'Windows' in OS:
+    if OS and 'Windows' in OS:
         _p = subprocess.check_output(
             ["machaao", "tunnel", "-p", p, "-t", t, "-h", "1"], stderr=subprocess.STDOUT, shell=True)
     else:
