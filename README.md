@@ -33,7 +33,7 @@ cd <project_name>
 ### Open ```chatbot.py``` in any text editor, update the api key and base url as shown below
 ```bash
 MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
-MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com" [for development purposes]
+MESSENGERX_BASE_URL = "https://ganglia.machaao.com" [for development purposes]
 ```
 
 ### Run the following for machaao to do it's magic.
