@@ -27,7 +27,7 @@ def messageHandler():
 
     # Edit this function the way you want.
 
-    incoming_data = machaao.request_handler(request)
+    incoming_data = machaao.extract_data(request)
 
     user_id = incoming_data["user_id"]
 
@@ -46,18 +46,9 @@ def messageHandler():
 
     # Read Doc @ https://messengerx.readthedocs.io/en/latest/
     # for better rich messaging options + personalization
-    response = machaao.send_message(payload)
+    machaao.send_message(payload)
 
-    output_payload = {
-        "success": True,
-        "message": response.text,
-    }
-
-    return Response(
-        mimetype="application/json",
-        response=json.dumps(output_payload),
-        status=200,
-    )
+    return "ok"
 
 
 if __name__ == "__main__":
