@@ -3,6 +3,11 @@
 [![Gitter](https://badges.gitter.im/messengerx-io/community.svg)](https://gitter.im/messengerx-io/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)  
 A module for python developers looking to rapidly build, prototype and publish personalized chatbots
 
+## Live Web Demo ##
+![figure](images/img.png)
+
+[Jeanie](https://messengerx.io/jeanie) is a GPT-J powered virtual girlfriend based on the module
+
 ### Minimum Requirements
 ```bash
 python # 3.6 or higher version
@@ -36,33 +41,6 @@ MESSENGERX_API_TOKEN = "<API_KEY_FROM_PORTAL>"
 MESSENGERX_BASE_URL = "https://ganglia.machaao.com" [for development purposes]
 ```
 
-### Run the following for machaao to do it's magic.
-```bash
-machaao run -p 5000 -t [CHATBOT-TOKEN]
-```
-
-Your bot should now be available @ [https://dev.messengerx.io/<chatbot_name>] to send a message to your chatbot.
-
-### Your chatbot is now ready to start receiving incoming messages from users
-```bash
-# HappyCoding
-```
-
-## Optional 
-
-### Run Machaao Tunnel in a seperate terminal and note down your FORWARDING URL
-```bash
-machaao tunnel -p 5000 -t [CHATBOT-TOKEN]
-
-[https://<....>.tunnel.messengerx.io/]
-```
-
-
-### Go to your bot settings on the portal and update your Chatbot Webhook URL Settings
-```bash
-[https://<....>.tunnel.messengerx.io/machaao/incoming]
-```
-
 ### Run your simple chatbot on your local server
 ```bash
 # For Linux/MacOS
@@ -70,6 +48,28 @@ python3 chatbot.py
 
 # For Windows
 python chatbot.py
+```
+
+
+### Start ngrok.io tunnel ###
+```
+ngrok http 5000
+```
+
+### Update your webhook ###
+Update your bot Webhook URL at [MessengerX.io Portal](https://portal.messengerx.io) with the url provided as shown below to continue development
+```
+Webhook Url: https://<TUNNEL-HOST>/webhooks/machaao/incoming
+```
+If you use [Ngrok.io](https://ngrok.io), your webhook URL would be of the format as in the example below
+```
+https://1234-115-187-40-104.ngrok.io/webhooks/machaao/incoming 
+```
+![figure](images/mx_screenshot.png)
+
+### Your chatbot is now ready to start receiving incoming messages from users
+```bash
+# HappyCoding
 ```
 
 

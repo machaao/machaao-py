@@ -206,12 +206,12 @@ def run(p, t):
             click.echo(f" * Updating the new hook for call to - {chatbot_url}")
 
             request(
-                "POST", f'https://ganglia-dev.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
+                "POST", f'https://ganglia.machaao.com/v1/bots/{t}', data=dumps(payload), headers=headers)
 
             _bot_name = _p.replace(".tunnel.messengerx.io", "")
 
             click.echo(click.style(
-                f" * Your bot is now accessible @ https://dev.messengerx.io/{_bot_name}", bg="black", fg="white"))
+                f" * Your bot is now accessible @ https://messengerx.io/{_bot_name}", bg="black", fg="white"))
 
             _chatbot_p.wait()
 

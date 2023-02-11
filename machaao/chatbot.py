@@ -14,10 +14,8 @@ from machaao import Machaao
 app = FlaskAPI(__name__)
 
 # Get your MESSENGERX_API_TOKEN from https://portal.messengerx.io
-MESSENGERX_API_TOKEN = ""
-
-# For development use https://ganglia-dev.machaao.com
-MESSENGERX_BASE_URL = "https://ganglia-dev.machaao.com"
+MESSENGERX_API_TOKEN = "<Fill Your Bot Token>"
+MESSENGERX_BASE_URL = "https://ganglia.machaao.com"
 
 machaao = Machaao(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL)
 
@@ -46,10 +44,8 @@ def messageHandler():
         "message": {"text": message},
     }
 
-    # Read more about APIs here: https://ganglia.machaao.com/api-docs/#/
-    # or here https://messengerx.readthedocs.io/en/latest/ or here
-    # https://github.com/machaao/machaao-py
-
+    # Read Doc @ https://messengerx.readthedocs.io/en/latest/
+    # for better rich messaging options + personalization
     response = machaao.send_message(payload)
 
     output_payload = {
