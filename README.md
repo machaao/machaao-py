@@ -4,7 +4,7 @@
 A module for python developers looking to rapidly build, prototype and publish personalized chatbots
 
 ## Live Web Demo ##
-![figure](images/img.png)
+![figure](https://github.com/machaao/machaao-py/blob/master/images/img.png?raw=true)
 
 [Jeanie](https://messengerx.io/jeanie) is a GPT-J powered virtual girlfriend based on the module
 
@@ -61,7 +61,7 @@ Update your bot Webhook URL at [MessengerX.io Portal](https://portal.messengerx.
 ```
 https://1234-115-187-40-104.ngrok.io/webhooks/machaao/incoming 
 ```
-![figure](images/mx_screenshot.png)
+![figure](https://github.com/machaao/machaao-py/blob/master/images/mx_screenshot.png?raw=true)
 
 ### Your chatbot is now ready to start receiving incoming messages from users
 ```bash
