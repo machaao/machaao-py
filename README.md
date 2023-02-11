@@ -51,7 +51,7 @@ python chatbot.py
 ```
 
 
-### Start ngrok.io tunnel ###
+### Start ngrok.io tunnel in a new terminal (local development) ###
 ```
 ngrok http 5000
 ```
@@ -59,7 +59,7 @@ ngrok http 5000
 ### Update your webhook ###
 Update your bot Webhook URL at [MessengerX.io Portal](https://portal.messengerx.io) with the url provided as shown below to continue development
 ```
-https://1234-115-187-40-104.ngrok.io/webhooks/machaao/incoming 
+https://<Your NGROK URL>/machaao/incoming 
 ```
 ![figure](https://github.com/machaao/machaao-py/blob/master/images/mx_screenshot.png?raw=true)
 
