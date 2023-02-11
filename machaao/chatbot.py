@@ -46,9 +46,18 @@ def messageHandler():
 
     # Read Doc @ https://messengerx.readthedocs.io/en/latest/
     # for better rich messaging options + personalization
-    machaao.send_message(payload)
+    response = machaao.send_message(payload)
 
-    return "ok"
+    output_payload = {
+        "success": True,
+        "message": response.text,
+    }
+
+    return Response(
+        mimetype="application/json",
+        response=json.dumps(output_payload),
+        status=200,
+    )
 
 
 if __name__ == "__main__":
