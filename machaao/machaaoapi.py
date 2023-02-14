@@ -1,8 +1,11 @@
+import base64
+
 from requests import request
 import json
 import httpx
 import asyncio
 import jwt
+from requests.structures import CaseInsensitiveDict
 
 
 class Machaao:
@@ -66,6 +69,22 @@ class Machaao:
         }
 
         return request("GET", url, headers=headers)
+
+    # please don't edit the lines below
+    def history(self, user_id: str, count: int):
+        e = "L3YxL2NvbnZlcnNhdGlvbnMvaGlzdG9yeS8="
+        check = base64.b64decode(e).decode('UTF-8')
+        url = f"{self.base_url}{check}{user_id}/{count}"
+
+        headers = CaseInsensitiveDict()
+        headers["api_token"] = self.api_token
+        headers["Content-Type"] = "application/json"
+
+        resp = request("GET", url, headers=headers)
+
+        if resp.status_code == 200:
+            return resp.json()
+
 
     def content_search_via_slug(self, slug):
         """Search content on your bot"""
