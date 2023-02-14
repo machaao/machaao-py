@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="machaao",
-    version="0.3.17",
+    version="0.3.18",
     author="Abhishek Raj",
     author_email="abhishek@machaao.com",
     description="A module for python developers looking to build, prototype & deploy deeply personalized chatbots",

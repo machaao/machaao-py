@@ -20,7 +20,7 @@ MESSENGERX_BASE_URL = "https://ganglia.machaao.com"
 machaao = Machaao(MESSENGERX_API_TOKEN, MESSENGERX_BASE_URL)
 
 
-@app.route("/machaao/incoming", methods=["POST"])
+@app.route("/machaao/hook", methods=["POST"])
 def messageHandler():
     """
     Incoming message handler.
