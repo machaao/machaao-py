@@ -121,15 +121,15 @@ class Machaao:
             "messaging": messaging
         }
 
-    def extract_data(self, request):
-        api_token = request.headers["api_token"]
-        user_id = request.headers["user_id"]
+    def extract_data(self, req):
+        api_token = req.headers.get("bot-token", None)
+        user_id = req.headers.get("machaao-user-id", None)
 
-        raw = request.json["raw"]
+        raw = req.json["raw"]
 
         if raw != "":
-            input = jwt.decode(str(raw), api_token, algorithms=["HS512"])
-            sub = input.get("sub", None)
+            inp = jwt.decode(str(raw), api_token, algorithms=["HS512"])
+            sub = inp.get("sub", None)
             # print("Conditional")
             if sub and type(sub) is dict:
                 sub = json.dumps(sub)

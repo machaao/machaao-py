@@ -59,7 +59,7 @@ ngrok http 5000
 ### Update your webhook ###
 Update your bot Webhook URL at [MessengerX.io Portal](https://portal.messengerx.io) with the url provided as shown below to continue development
 ```
-https://<Your NGROK URL>/machaao/incoming 
+https://<Your NGROK URL>/machaao/hook 
 ```
 ![figure](https://github.com/machaao/machaao-py/blob/master/images/mx_screenshot.png?raw=true)
 
