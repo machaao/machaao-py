@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  release-to-pypi:
+  release_to_pypi:
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
